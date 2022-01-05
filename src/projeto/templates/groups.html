@@ -1,0 +1,14 @@
+{% extends "base_authenticated.html" %}
+
+{% block page_content %}
+<div class="container">
+    <div class="row">
+        {% for group in groups %}
+        <div class="col-12 border-top border-bottom">
+            <h1>{{ group.name }}</h1>
+            <a class="btn btn-sm btn-info" href="/group/{{ group.id }}">Ver</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
