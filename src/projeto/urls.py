@@ -5,6 +5,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('post/create', views.post_create, name='post_create'),
     path('groups', views.groups, name='groups'),
     path('group/<int:id>', views.group, name='group'),
     path('login', views.login, name='login'),

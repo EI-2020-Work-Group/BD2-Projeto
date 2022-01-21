@@ -1,0 +1,31 @@
+{% extends "base_authenticated.html" %}
+
+{% block page_content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <form action="/post/create" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                {{ form.non_field_errors }}
+
+                {% for hidden_field in form.hidden_fields %}
+                    {{ hidden_field.errors }}
+                    {{ hidden_field }}
+                {% endfor %}
+
+                {% for field in form.visible_fields %}
+                <div class="form-group mb-2">
+                    {{ field.label_tag }}
+                    {{ field.errors }}
+                    {{ field }}
+                    {{ field.help_text }}
+                </div>
+                {% endfor %}
+
+                <input class="btn btn-success" type="submit" value="Create">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

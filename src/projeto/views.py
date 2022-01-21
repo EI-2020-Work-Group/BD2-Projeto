@@ -1,8 +1,10 @@
+from typing import Optional
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Group
 from .models import Post
+from .forms import PostForm
 
 # Create your views here.
 def index(request):
@@ -20,6 +22,31 @@ def index(request):
 
     return render(request, 'index.html', context)
 
+@login_required(login_url='/login')
+def post_create(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            newPost = Post(
+                title=form.cleaned_data['title'], 
+                content=form.cleaned_data['content'],
+                image=form.cleaned_data['image'],
+                is_login_required=0,
+                group=form.cleaned_data['group'],
+                created_by=request.user)
+            
+            newPost.save()
+            return redirect('/')
+        
+    postForm = PostForm()
+    postForm.fields['group'].choices = [('', 'Nenhum')]
+    postForm.fields['group'].choices += [(c.id, c.name) for c in request.user.groups.all()]
+    context = {
+        'form': postForm
+    }
+
+    return render(request, 'posts/create.html', context)
+    
 
 @login_required(login_url='/login')
 def groups(request):
